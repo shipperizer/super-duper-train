@@ -14,7 +14,6 @@ data "template_file" "userdata" {
   }
 }
 
-
 resource "aws_launch_configuration" "ecs_instance" {
   name_prefix          = "${var.cluster_name}-ecs-cluster-instance-${var.environment}"
   instance_type        = "${var.instance_type}"
@@ -29,7 +28,6 @@ resource "aws_launch_configuration" "ecs_instance" {
     create_before_destroy = true
   }
 }
-
 
 resource "aws_autoscaling_group" "ecs_cluster_instances" {
   name                 = "ecs-cluster-instances-${var.environment}"
@@ -81,11 +79,13 @@ resource "aws_security_group" "ecs_instance" {
 }
 
 data "aws_ami" "ecs_ami" {
-  most_recent = true
+  most_recent      = true
   executable_users = ["self"]
+
   filter {
-    name = "name"
+    name   = "name"
     values = ["base_ecs_*"]
   }
+
   owners = ["self"]
 }

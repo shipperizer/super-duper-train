@@ -1,12 +1,12 @@
 resource "aws_alb" "alb" {
-  name            = "${var.service_name}-alb-${var.environment}"
+  name = "${var.service_name}-alb-${var.environment}"
 
   subnets         = "${var.direct_subnets[var.environment]}"
   security_groups = ["${aws_security_group.alb_sg.id}", "${lookup(var.sg_id, var.environment)}"]
 
-  internal        = false
+  internal = false
 
-  idle_timeout                = 400
+  idle_timeout = 400
 }
 
 resource "aws_alb_listener" "web" {
@@ -19,7 +19,6 @@ resource "aws_alb_listener" "web" {
     type             = "forward"
   }
 }
-
 
 resource "aws_alb_target_group" "web" {
   name     = "${var.service_name}-${var.environment}-alb-tg"
@@ -40,7 +39,7 @@ resource "aws_alb_target_group" "web" {
 resource "aws_security_group" "alb_sg" {
   name        = "${var.service_name}-elb-${var.environment}"
   description = "Security group for ${var.service_name}-alb-${var.environment}"
-  vpc_id = "${data.terraform_remote_state.cluster_state.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.cluster_state.vpc_id}"
 
   egress {
     from_port   = 0
@@ -52,14 +51,13 @@ resource "aws_security_group" "alb_sg" {
 
 // all docker range allowed as port allocated dynamically
 resource "aws_security_group_rule" "alb_inbound_rule_on_ecs" {
-	security_group_id = "${data.terraform_remote_state.cluster_state.sg_cluster}"
-  	type = "ingress"
-  	from_port = 32768
-  	to_port = 61000
-  	protocol = "tcp"
-  	source_security_group_id = "${aws_security_group.alb_sg.id}"
+  security_group_id        = "${data.terraform_remote_state.cluster_state.sg_cluster}"
+  type                     = "ingress"
+  from_port                = 32768
+  to_port                  = 61000
+  protocol                 = "tcp"
+  source_security_group_id = "${aws_security_group.alb_sg.id}"
 }
-
 
 resource "aws_route53_record" "web_public_r53" {
   zone_id = "${lookup(var.r53_zone_id, var.environment)}"

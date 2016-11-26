@@ -3,9 +3,9 @@ output "task_arns" {
 }
 
 output "cluster" {
-    value = "${data.terraform_remote_state.cluster_state.cluster_name}"
+  value = "${data.terraform_remote_state.cluster_state.cluster_name}"
 }
 
 output "public_dns" {
-    value = "${aws_route53_record.web_public_r53.dns_name}"
+  value = "${aws_route53_record.web_public_r53.dns_name}"
 }

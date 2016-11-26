@@ -7,8 +7,8 @@ resource "aws_ecs_service" "ecs_web_service" {
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.alb.arn}"
-    container_name = "${var.service_name}-${var.environment}"
-    container_port = "${var.container_port}"
+    container_name   = "${var.service_name}-${var.environment}"
+    container_port   = "${var.container_port}"
   }
 }
 
@@ -21,10 +21,10 @@ data "template_file" "web_td_template" {
   template = "${file("${path.module}/td/web_td.json")}"
 
   vars {
-    service_name               = "${var.service_name}-${var.environment}"
-    docker_image               = "${var.image_name_and_tag}"
-    container_port             = "${var.container_port}"
-    container_cpu_limit        = 64
-    container_memory_limit     = 64
+    service_name           = "${var.service_name}-${var.environment}"
+    docker_image           = "${var.image_name_and_tag}"
+    container_port         = "${var.container_port}"
+    container_cpu_limit    = 64
+    container_memory_limit = 64
   }
 }

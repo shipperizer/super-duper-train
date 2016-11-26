@@ -33,7 +33,7 @@ variable "remote_state_bucket" {
 }
 
 variable "sg_id" {
-  type = "map"
+  type        = "map"
   description = "SG that allows external access"
 
   default = {

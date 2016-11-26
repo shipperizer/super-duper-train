@@ -30,13 +30,6 @@ resource "aws_security_group" "postgres_main-sg" {
     protocol        = "tcp"
     security_groups = ["${aws_security_group.ecs_instance.id}"]
   }
-
-  ingress {
-    from_port   = "5432"
-    to_port     = "5432"
-    protocol    = "tcp"
-    cidr_blocks = ["80.229.188.87/32"]
-  }
 }
 
 resource "aws_db_subnet_group" "postgres_subnet" {
