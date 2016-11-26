@@ -1,0 +1,61 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "aws_region": "eu-west-1",
+    "docker_auth": "",
+    "docker_email": "",
+    "vpc_id": "",
+    "public_subnet_id": "",
+    "sg_id": "",
+  },
+
+  "builders": [
+    {
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "type": "amazon-ebs",
+      "region": "{{user `aws_region`}}",
+      "source_ami_filter": {
+          "filters": {
+            "virtualization-type": "hvm",
+            "name": "*amzn-ami*amazon-ecs-optimized*",
+            "root-device-type": "ebs"
+          },
+          "owners": ["591542846629"],
+          "most_recent": true
+      },
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "vpc_id": "{{user `vpc_id`}}",
+      "subnet_id": "{{user `public_subnet_id`}}",
+      "security_group_ids": "{{user `sg_id`}}",
+      "ami_name": "base_ecs"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum install -y jq docker gcc git libffi libffi-devel openssl-devel postgresql-devel python34-devel python34-pip wget",
+        "sudo pip-3.4 install boto3 docker-py",
+        "sudo ln -s /usr/bin/pip-3.4 /usr/bin/pip3"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "docker-config.json",
+      "destination": "/tmp/docker-config.json"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sed -i 's/$AUTH/{{user `docker_auth`}}/' /tmp/docker-config.json",
+        "sed -i 's/$EMAIL/{{user `docker_email`}}/' /tmp/docker-config.json",
+        "mkdir /home/ec2-user/.docker",
+        "mv /tmp/docker-config.json /home/ec2-user/.docker/config.json"
+      ]
+    }
+  ]
+}
