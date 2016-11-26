@@ -1,0 +1,35 @@
+[
+   {
+     "volumesFrom": [],
+     "memory": null,
+     "extraHosts": null,
+     "dnsServers": null,
+     "disableNetworking": null,
+     "dnsSearchDomains": null,
+     "portMappings": [
+       {
+         "containerPort": ${container_port}
+       }
+     ],
+     "hostname": null,
+     "essential": true,
+     "entryPoint": [],
+     "mountPoints": [],
+     "name": "${service_name}",
+     "ulimits": null,
+     "dockerSecurityOptions": null,
+     "environment": [],
+     "links": [],
+     "workingDirectory": null,
+     "readonlyRootFilesystem": null,
+     "image": "${docker_image}",
+     "command": null,
+     "user": null,
+     "dockerLabels": null,
+     "logConfiguration": null,
+     "cpu": ${container_cpu_limit},
+     "privileged": null,
+     "expanded": true,
+     "memoryReservation": ${container_memory_limit}
+   }
+ ]
