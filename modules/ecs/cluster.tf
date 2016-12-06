@@ -89,3 +89,29 @@ data "aws_ami" "ecs_ami" {
 
   owners = ["self"]
 }
+
+resource "aws_autoscaling_policy" "memory_ecs_cluster_scale_up" {
+  name                    = "terraform-memory-ecs-cluster-scale-up"
+  adjustment_type         = "ChangeInCapacity"
+  autoscaling_group_name  = "${aws_autoscaling_group.ecs_cluster_instances.name}"
+  policy_type             = "StepScaling"
+  metric_aggregation_type = "Average"
+
+  step_adjustment {
+    scaling_adjustment          = 1
+    metric_interval_lower_bound = 0
+  }
+}
+
+resource "aws_autoscaling_policy" "memory_ecs_cluster_scale_down" {
+  name                    = "terraform-memory-ecs-cluster-scale-down"
+  adjustment_type         = "ChangeInCapacity"
+  autoscaling_group_name  = "${aws_autoscaling_group.ecs_cluster_instances.name}"
+  policy_type             = "StepScaling"
+  metric_aggregation_type = "Average"
+
+  step_adjustment {
+    scaling_adjustment          = -1
+    metric_interval_upper_bound = -15.0
+  }
+}
