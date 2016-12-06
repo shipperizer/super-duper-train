@@ -11,7 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "memory__gte" {
   insufficient_data_actions = []
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.ecs_cluster_instances.name}"
+    ClusterName = "${aws_ecs_cluster.ecs_cluster.name}"
   }
 
   alarm_actions = ["${aws_autoscaling_policy.memory_ecs_cluster_scale_up.arn}"]
@@ -30,7 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_sentry_celery_lte" {
   insufficient_data_actions = []
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.ecs_cluster_instances.name}"
+    ClusterName = "${aws_ecs_cluster.ecs_cluster.name}"
   }
 
   alarm_actions = ["${aws_autoscaling_policy.memory_ecs_cluster_scale_down.arn}"]
